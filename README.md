@@ -5,8 +5,13 @@ The Gene Prediction Tool is a Python program designed to predict gene locations 
 ## Table of Contents
 - [Features](#features)
 - [Requirements](#requirements)
+  - [Create a virtual environment](#create-a-virtual-environment)
 - [Installation](#installation)
 - [Usage](#usage)
+  - [Arguments](#arguments)
+  - [Example](#example)
+- [Output](#output)
+- [Verify Prediction Quality](#verify-prediction-quality)
 - [License](#license)
 - [Contact](#contact)
 
@@ -59,7 +64,6 @@ python gpred/gpred.py -i <genome_file.fasta> [-g <min_gene_len>] [-s <max_shine_
 python gpred/gpred.py -i genome.fasta -g 100 -s 20 -d 50 -p predicted_genes.csv -o genes.fna
 ```
 
-## Output
 ## Output
 
 The program generates two types of output files based on the predicted genes in the genome:
