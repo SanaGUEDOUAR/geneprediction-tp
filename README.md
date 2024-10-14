@@ -1,38 +1,98 @@
-# Gene prediction
+# Gene Prediction Tool
 
+The Gene Prediction Tool is a Python program designed to predict gene locations in a given genomic sequence in FASTA format. It identifies potential start and stop codons, evaluates the presence of Shine-Dalgarno motifs, and generates both a list of predicted gene positions and a FASTA file containing the corresponding gene sequences.
 
-## Summary
+## Table of Contents
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
+- [Contact](#contact)
 
-Genes correspond to a subsequence of transcripts that can be translated into proteins by the ribosome. They have a reading frame consisting of consecutive triplets from an initiation codon ('AUG', 'UUG', 'CUG', 'AUU' or 'GUG') and a stop codon (UAA', 'UAG', or 'UGA'). These codons are in the same reading frame!
-We find upstream of the initiation codon a motif allowing the initiation of translation via the binding of the 16S subunit of ribosomal RNA: AGGAGGUAA called the Shine-Dalagarno sequence [\[Shine and Dalgarno 1973\]](https://www.sciencedirect.com/science/article/pii/0022283673905287). This motif is not necessarily in the same reading frame as the initiation codon and may be incomplete.
+## Features
 
-<img src="/doc/illustrate.png" align="center" />
+- Reads genomic sequences in FASTA format.
+- Predicts genes based on user-defined parameters.
+- Identifies Shine-Dalgarno motifs upstream of start codons.
+- Outputs gene positions and sequences in both tabular and FASTA formats.
 
-Few organisms currently benefit from an experimentally verified annotation. Gene prediction therefore remains an important task for the automatic annotation of genomes. Multiple software and approaches exist for this [task](https://en.wikipedia.org/wiki/List_of_gene_prediction_software).
-
-We will develop a simple approach to predict prokaryotic genes based on the detection of reading frames and the Shine-Dalgarno motif. The objective of this practical work will be to predict the genes of the reference genome of [Listeria monocytogenes EGD-e](https://www.ncbi.nlm.nih.gov/genome/browse/#!/proteins/159/159660%7CListeria%20monocytogenes%20EGD-e/) (assembled and sequenced by the Institut Pasteur), which presents 2867 genes.
-
-
-## Basic usage
-
+## Requirements
+- Python 3.9
+- Required Python packages:
+  - `argparse`
+  - `textwrap`
+  - `re`
+  - `os`
+  - `pathlib`
+  
+### Create a virtual environment
+It is recommended to create a virtual environment to install the required packages. You can create a virtual environment using `conda`:
+```bash
+conda create -n gpred python
+conda activate gpred
 ```
-python3 gpred/gpred.py -i data/listeria.fasta -p predicted_gene_positions.csv -o  predicted_genes.fasta 
+
+## Installation
+1. Clone the repository:
+```bash
+git clone git@github.com:SanaGUEDOUAR/geneprediction-tp.git
+cd geneprediction-tp
 ```
 
-Available arguments:
+2. Install any additional dependencies if needed.
+
+## Usage
+```bash
+python gpred/gpred.py -i <genome_file.fasta> [-g <min_gene_len>] [-s <max_shine_dalgarno_distance>] [-d <min_gap>] [-p <predicted_genes_file>] [-o <fasta_file>]
 ```
-  -h, --help            show this help message and exit
-  -i GENOME_FILE        Complete genome file in fasta format
-  -g MIN_GENE_LEN       Minimum gene length to consider (default 50).
-  -s MAX_SHINE_DALGARNO_DISTANCE
-                        Maximum distance from start codon where to look for a Shine-Dalgarno motif (default 16)
-  -d MIN_GAP            Minimum gap between two genes (shine box not included, default 40).
-  -p PREDICTED_GENES_FILE
-                        Tabular file giving position of predicted genes
-  -o FASTA_FILE         Fasta file giving sequence of predicted genes
+### Arguments
+- -i or --genome_file: (required) Path to the input genome file in FASTA format.
+- -g or --min_gene_len: (optional) Minimum gene length to consider. Default is 50.
+- -s or --max_shine_dalgarno_distance: (optional) Maximum distance from the start codon to search for a Shine-Dalgarno motif. Default is 16.
+- -d or --min_gap: (optional) Minimum gap between two genes (Shine-Dalgarno motif not included). Default is 40.
+- -p or --predicted_genes_file: (optional) Output file for the predicted gene positions in CSV format. Default is predict_genes.csv.
+- -o or --fasta_file: (optional) Output FASTA file for the sequences of predicted genes. Default is genes.fna.
+
+### Example
+```bash
+python gpred/gpred.py -i genome.fasta -g 100 -s 20 -d 50 -p predicted_genes.csv -o genes.fna
 ```
 
-## Example
+## Output
+## Output
 
-We can compair the result of gpred compaired to [genome annotation](/data/position.csv) and [prodigal](https://github.com/hyattpd/Prodigal) [complete genes prediction](/data/prodigal.csv):
-<img src="/doc/compair.png" align="center" />
+The program generates two types of output files based on the predicted genes in the genome:
+
+1. **Predicted Genes File (`predict_genes.csv`)**:
+   - This file contains a tabular representation of the predicted gene positions in the genome.
+   - Each row includes:
+     - **Start**: The start position of the predicted gene.
+     - **Stop**: The stop position of the predicted gene.
+
+   Example content of `predict_genes.csv`:
+   Start, Stop
+    1, 100
+    200, 300
+    400, 500
+
+2. **Fasta File (`genes.fna`)**:
+- This file provides the sequences of the predicted genes in FASTA format.
+- Each gene sequence is preceded by a header line that identifies the gene.
+
+Example content of `genes.fna`:
+>gene_1
+GTGCAATCAATTGAAGACATCTGGCAGGAAACACTGC
+>gene_2
+ATGAAATTTGTTATTGAGCGTGATCGTCTTGTCCAAG
+
+
+## License
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](https://www.gnu.org/licenses/gpl-3.0.html) file for more details.
+
+## Contact
+For questions or feedback, please contact:
+
+Author: Sana Guedouar
+Email: [sana.guedouar@etu.u-paris.fr](mailto:sana.guedouar@etu.u-paris.fr)
+University: Université Paris Cité
